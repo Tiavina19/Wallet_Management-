@@ -1,23 +1,25 @@
 package Models;
 
 public class Transaction {
-    private Long transactionId;
+    private int transactionId;
     private double amount;
-    private Account accountSource;
-    private Account accountDestination;
+    private int accountSourceId;
+    private int accountDestinationId;
 
-    public Transaction(Long transactionId, double amount, Account accountSource, Account accountDestination) {
+    public Transaction(int transactionId, double amount, int accountSourceId, int accountDestinationId) {
         this.transactionId = transactionId;
         this.amount = amount;
-        this.accountSource = accountSource;
-        this.accountDestination = accountDestination;
+        this.accountSourceId = accountSourceId;
+        this.accountDestinationId = accountDestinationId;
     }
 
-    public Long getTransactionId() {
+    // Getters and setters
+
+    public int getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(Long transactionId) {
+    public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
 
@@ -29,29 +31,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Account getAccountSource() {
-        return accountSource;
+    public int getAccountSourceId() {
+        return accountSourceId;
     }
 
-    public void setAccountSource(Account accountSource) {
-        this.accountSource = accountSource;
+    public void setAccountSourceId(int accountSourceId) {
+        this.accountSourceId = accountSourceId;
     }
 
-    public Account getAccountDestination() {
-        return accountDestination;
+    public int getAccountDestinationId() {
+        return accountDestinationId;
     }
 
-    public void setAccountDestination(Account accountDestination) {
-        this.accountDestination = accountDestination;
-    }
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "transactionId=" + transactionId +
-                ", amount=" + amount +
-                ", accountSource=" + accountSource +
-                ", accountDestination=" + accountDestination +
-                '}';
+    public void setAccountDestinationId(int accountDestinationId) {
+        this.accountDestinationId = accountDestinationId;
     }
 }

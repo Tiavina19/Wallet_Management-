@@ -1,34 +1,34 @@
 package Models;
 
-import java.util.Currency;
-
 public class Account {
-    private Long accountId;
-    private String username;
+    private int accountId;
+    private String userName;
     private double balance;
-    private Currency currency;
+    private int currencyId;
 
-    public Account(Long accountId, String username, double balance, Currency currency) {
+    public Account(int accountId, String userName, double balance, int currencyId) {
         this.accountId = accountId;
-        this.username = username;
+        this.userName = userName;
         this.balance = balance;
-        this.currency = currency;
+        this.currencyId = currencyId;
     }
 
-    public Long getAccountId() {
+    // Getters and setters
+
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public double getBalance() {
@@ -39,22 +39,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public int getCurrencyId() {
+        return currencyId;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "accountId=" + accountId +
-                ", username='" + username + '\'' +
-                ", balance=" + balance +
-                ", currency=" + currency +
-                '}';
+    public void setCurrencyId(int currencyId) {
+        this.currencyId = currencyId;
     }
 }
-

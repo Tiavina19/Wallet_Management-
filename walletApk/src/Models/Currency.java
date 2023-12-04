@@ -1,19 +1,23 @@
 package Models;
 
 public class Currency {
-    private Long currencyId;
+    private int currencyId;
     private String currencyName;
+    private double exchangeRate;
 
-    public Currency(Long currencyId, String currencyName) {
+    public Currency(int currencyId, String currencyName, double exchangeRate) {
         this.currencyId = currencyId;
         this.currencyName = currencyName;
+        this.exchangeRate = exchangeRate;
     }
 
-    public Long getCurrencyId() {
+    // Getters and setters
+
+    public int getCurrencyId() {
         return currencyId;
     }
 
-    public void setCurrencyId(Long currencyId) {
+    public void setCurrencyId(int currencyId) {
         this.currencyId = currencyId;
     }
 
@@ -25,11 +29,11 @@ public class Currency {
         this.currencyName = currencyName;
     }
 
-    @Override
-    public String toString() {
-        return "Currency{" +
-                "currencyId=" + currencyId +
-                ", currencyName='" + currencyName + '\'' +
-                '}';
+    public double getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(double exchangeRate) {
+        this.exchangeRate = exchangeRate;
     }
 }

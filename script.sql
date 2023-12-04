@@ -4,31 +4,41 @@ CREATE DATABASE wallet_management;
 
 \c wallet_management
 
-CREATE TABLE IF NOT EXISTS currency (
+-- Création de la table Currency s'il n'existe pas
+CREATE TABLE IF NOT EXISTS Currency (
     currency_id SERIAL PRIMARY KEY,
-    currency_name VARCHAR(250) NOT NULL UNIQUE
+    currency_name VARCHAR(255) NOT NULL,
+    exchange_rate DOUBLE PRECISION NOT NULL
 );
 
-INSERT INTO currency (currency_name) VALUES('EUROS'),('ARIARY'),('DOLLAR');
+-- Insertion de données factices dans la table Currency
+INSERT INTO Currency (currency_name, exchange_rate) VALUES
+    ('EUROS', 3000.10),
+    ('ARIARY', 1.0),
+    ('DOLLAR', 2000.12);
 
-CREATE TABLE IF NOT EXISTS account (
+-- Création de la table Account s'il n'existe pas
+CREATE TABLE IF NOT EXISTS Account (
     account_id SERIAL PRIMARY KEY,
-    user_name VARCHAR(250) NOT NULL,
-    balance DECIMAL NOT NULL,
-    currency_id INT REFERENCES currency(currency_id) ON DELETE CASCADE
+    user_name VARCHAR(255) NOT NULL,
+    balance DOUBLE PRECISION NOT NULL,
+    currency_id INTEGER REFERENCES Currency(currency_id) ON DELETE CASCADE
 );
 
-INSERT INTO account (user_name, balance, currency_id) VALUES
-    ('Tiavina Andriatsitohery', 1000.00, 1),
-    ('Aina Dylan', 500.00, 2);
+-- Insertion de données factices dans la table Account
+INSERT INTO Account (user_name, balance, currency_id) VALUES
+    ('Tiavina Andriatsitohery', 500.00, 1),
+    ('Aina Dylan', 700.00, 1);
 
-
-CREATE TABLE IF NOT EXISTS transaction (
+-- Création de la table Transaction s'il n'existe pas
+CREATE TABLE IF NOT EXISTS Transaction (
     transaction_id SERIAL PRIMARY KEY,
-    amount DECIMAL NOT NULL,
-    account_source_id INT REFERENCES account(account_id) ON DELETE CASCADE,
-    account_destination_id INT REFERENCES account(account_id) ON DELETE CASCADE
+    amount DOUBLE PRECISION NOT NULL,
+    account_source_id INTEGER REFERENCES Account(account_id) ON DELETE CASCADE,
+    account_destination_id INTEGER REFERENCES Account(account_id) ON DELETE CASCADE
 );
 
-INSERT INTO transaction (amount, account_source_id, account_destination_id) VALUES (600.00, 1, 2),(150.00, 2, 1);
-
+-- Insertion de données factices dans la table Transaction
+INSERT INTO Transaction (amount, account_source_id, account_destination_id) VALUES
+    (1500.00, 1, 2),
+    (5000.00, 2, 1);
