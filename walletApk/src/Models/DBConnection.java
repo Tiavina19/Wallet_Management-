@@ -14,16 +14,19 @@ public class DBConnection {
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                // URL de connexion à la base de données PostgreSQL
-                String url = "jdbc:postgresql://localhost:5432/wallet_management";
-                // Nom d'utilisateur de la base de données
-                String user = "wallet_admin";
-                // Mot de passe de la base de données
-                String password = "123456";
+                // Récupération des variables d'environnement
+                String url = System.getenv("DB_URL");
+                String user = System.getenv("DB_USER");
+                String password = System.getenv("DB_PASSWORD");
 
-                // Établissement de la connexion
-                connection = DriverManager.getConnection(url, user, password);
-                System.out.println("Connected to the database.");
+                // Vérification que les variables d'environnement ne sont pas nulles
+                if (url != null && user != null && password != null) {
+                    // Établissement de la connexion
+                    connection = DriverManager.getConnection(url, user, password);
+                    System.out.println("Connected to the database.");
+                } else {
+                    System.err.println("Environment variables for database connection are not set.");
+                }
             } catch (SQLException e) {
                 // Log de l'exception (à remplacer par un logger approprié)
                 System.err.println("Connection failed: " + e.getMessage());
