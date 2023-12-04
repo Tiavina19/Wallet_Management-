@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyCrudOperations {
-    private final Connection connection;
+    private Connection connection;
 
     public CurrencyCrudOperations() {
         // Obtenez la connexion depuis la classe DBConnection
@@ -48,6 +48,32 @@ public class CurrencyCrudOperations {
             e.printStackTrace();
         }
         return currencies;
+    }
+
+    // Méthode pour mettre à jour une devise
+    public void updateCurrency(Currency currency) {
+        String query = "UPDATE Currency SET currency_name=?, exchange_rate=? WHERE currency_id=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, currency.getCurrencyName());
+            preparedStatement.setDouble(2, currency.getExchangeRate());
+            preparedStatement.setInt(3, currency.getCurrencyId());
+            preparedStatement.executeUpdate();
+            System.out.println("Currency updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Méthode pour supprimer une devise
+    public void deleteCurrency(int currencyId) {
+        String query = "DELETE FROM Currency WHERE currency_id=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, currencyId);
+            preparedStatement.executeUpdate();
+            System.out.println("Currency deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Méthode pour fermer la connexion (à appeler à la fin)
