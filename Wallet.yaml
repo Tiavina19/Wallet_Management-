@@ -15,23 +15,31 @@ paths:
       operationId: getAccounts
       responses:
         200:
-          $ref: "#/components/responses/AccountsList_200"
-
-    post:
-      tags:
-        - "Accounts"
-      summary: Add a new account
-      operationId: addAccount
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Account"
-      responses:
-        200:
-          $ref: "#/components/responses/Account_200"
+          $ref: "#/components/responses/Success200"
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
 
   /accounts/{id}:
+    get:
+      tags:
+        - "Accounts"
+      summary: Get an account by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the account
+      responses:
+        200:
+          $ref: "#/components/responses/Success200"
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
     put:
       tags:
         - "Accounts"
@@ -48,205 +56,279 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Account"
+              $ref: "#/components/schemas/AccountInput"
       responses:
-        200:
-          $ref: "#/components/responses/Account_200"
-
-  /transactions:
-    get:
-      tags:
-        - "Transactions"
-      summary: Get the list of all transactions
-      operationId: getTransactions
-      responses:
-        200:
-          $ref: "#/components/responses/TransactionsList_200"
-    post:
-      tags:
-        - "Transactions"
-      summary: Add a new transaction
-      operationId: addTransaction
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Transaction"
-      responses:
-        200:
-          $ref: "#/components/responses/Transaction_200"
-
+        204:
+          description: Success
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
   /currencies:
     get:
       tags:
         - "Currencies"
-      summary: Get the list of all currencies
-      operationId: getCurrencies
+      summary: Retrieve all currencies
       responses:
         200:
-          $ref: "#/components/responses/CurrenciesList_200"
-
-    post:
-      tags:
-        - "Currencies"
-      summary: Add a new currency
-      operationId: addCurrency
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Currency"
-      responses:
-        200:
-          $ref: "#/components/responses/Currency_200"
+          $ref: "#/components/responses/Success200"
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
 
   /currencies/{id}:
+    get:
+      tags:
+        - "Currencies"
+      summary: Retrieve a currency by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the currency
+      responses:
+        200:
+          $ref: "#/components/responses/Success200"
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
     put:
       tags:
         - "Currencies"
-      summary: Update details of an existing currency
-      operationId: updateCurrency
-      parameters:
-        - in: path
-          name: id
-          description: ID of the currency to update
-          required: true
-          schema:
-            type: string
+      summary: Update a currency
       requestBody:
+        description: Data to update a currency
+        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Currency"
+              $ref: "#/components/schemas/CurrencyInput"
+      responses:
+        204:
+          description: Success
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
+  /transactions:
+    get:
+      tags:
+        - "Transactions"
+      summary: Obtain all transactions
       responses:
         200:
-          $ref: "#/components/responses/Currency_200"
+          $ref: "#/components/responses/Success200"
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
+
+  /transactions/{id}:
+    get:
+      tags:
+        - "Transactions"
+      summary: Obtain a transaction by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the transaction
+      responses:
+        200:
+          $ref: "#/components/responses/Success200"
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
+    put:
+      tags:
+        - "Transactions"
+      summary: Update a transaction by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the transaction
+      requestBody:
+        description: Updated transaction data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionInput"
+      responses:
+        204:
+          description: Success
+        404:
+          $ref: "#/components/responses/NotFound404"
+        500:
+          $ref: "#/components/responses/Error500"
 
 components:
+  responses:
+    Success200:
+      description: Successful response
+      content:
+        application/json:
+          example:
+            id: 1
+            name: Euro
+            code: EUR
+    Success204:
+      description: Successful update, no content
+
+    NotFound404:
+      description: Resource not found
+      content:
+        application/json:
+          example:
+            error: Currency not found
+
+    Success200Transaction:
+      description: Successful response
+      content:
+        application/json:
+          example:
+            id: 1
+            label: "Transaction 1"
+            amount: 80.0
+            type: "crédit"
+            date: "2023-12-31T23:59:59Z"
+            account:
+              id: 1
+              name: "Account 1"
+              currency:
+                id: 1
+                name: Euro
+                code: EUR
+              code: "ACC1"
+              balance:
+                value: 1800.0
+                datetime: "2023-12-31T23:59:59Z"
+              type: "banque"
+              transactions: []
+
+    Created201:
+      description: Resource created successfully
+      content:
+        application/json:
+          example:
+            id: 2
+            label: "Transaction 2"
+            amount: -100.0
+            type: "débit"
+            date: "2023-12-31T12:30:45Z"
+            account:
+              id: 2
+              name: "Account 2"
+              currency:
+                id: 2
+                name: Dollar
+                code: USD
+              code: "ACC2"
+              balance:
+                value: 420.0
+                datetime: "2023-12-31T12:30:45Z"
+              type: "espèce"
+              transactions: []
+
+    Success204Transaction:
+      description: Successful update, no content
+
+    NotFound404Transaction:
+      description: Resource not found
+      content:
+        application/json:
+          example:
+            error: Transaction not found
+
+    Error500:
+      description: Internal server error
+      content:
+        application/json:
+          example:
+            error: Internal server error
   schemas:
+    CurrencyInput:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+    AccountInput:
+      type: object
+      properties:
+        name:
+          type: string
+        currency:
+          $ref: "#/components/schemas/Currency"
+        code:
+          type: string
+        balance:
+          type: object
+          properties:
+            value:
+              type: number
+            datetime:
+              type: string
+              format: date-time
+          required:
+            - value
+            - datetime
+        type:
+          type: string
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+
     Currency:
       type: object
       properties:
-        currency_id:
+        id:
           type: integer
-          format: int64
-          description: The unique identifier for the currency.
-        currency_name:
+        name:
           type: string
-          description: The name of the currency.
-        exchange_rate:
-          type: number
-          format: double
-          description: The exchange rate of this currency compared to Ariary (or another reference currency).
-      example:
-        - currency_id: 1
-          currency_name: "EUROS"
-          exchange_rate: 3000.10
-        - currency_id: 2
-          currency_name: "ARIARY"
-          exchange_rate: 1.0
-        - currency_id: 3
-          currency_name: "DOLLAR"
-          exchange_rate: 2000.12
-    Account:
+        code:
+          type: string
+
+    TransactionInput:
       type: object
       properties:
-        account_id:
-          type: integer
-          format: int64
-          description: The unique identifier for the account.
-        user_name:
+        label:
           type: string
-          description: The username associated with the account.
-        balance:
+        amount:
           type: number
-          format: double
-          description: The balance in the account.
-        currency:
-          $ref: "#/components/schemas/Currency"
-      example:
-        - account_id: 1
-          user_name: "Tiavina Andriatsitohery"
-          balance: 500.00
-          currency:
-            currency_id: 1
-            currency_name: "ARIARY"
-        - account_id: 2
-          user_name: "Aina Dylan"
-          balance: 700.00
-          currency:
-            currency_id: 1
-            currency_name: "ARIARY"
+        type:
+          type: string
+        date:
+          type: string
+          format: date-time
+        account:
+          $ref: "#/components/schemas/AccountInput"
 
     Transaction:
       type: object
       properties:
-        transaction_id:
+        id:
           type: integer
-          format: int64
-          description: The unique identifier for the transaction.
+        label:
+          type: string
         amount:
           type: number
-          format: double
-          description: The amount involved in the transaction.
-        account_source_id:
-          type: integer
-          format: int64
-          description: The source account for the transaction.
-        account_destination_id:
-          type: integer
-          format: int64
-          description: The destination account for the transaction.
-      example:
-        - transaction_id: 1
-          amount: 1500.00
-          acccount_source_id: 1
-          account_destination_id: 2
-        - transaction_id: 2
-          amount: 5000.00
-          acccount_source_id: 2
-          account_destination_id: 1
-
-  responses:
-    AccountsList_200:
-      description: Lists all available accounts.
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Account"
-    Account_200:
-      description: Details of the account added or updated.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Account"
-    TransactionsList_200:
-      description: Lists all transactions.
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Transaction"
-    Transaction_200:
-      description: Details of the added transaction.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Transaction"
-    CurrenciesList_200:
-      description: Lists all available currencies.
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Currency"
-    Currency_200:
-      description: Details of the currency added or updated.
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Currency"
+        type:
+          type: string
+        date:
+          type: string
+          format: date-time
+        account:
+          $ref: "#/components/schemas/AccountInput"
