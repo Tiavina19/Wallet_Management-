@@ -1,26 +1,37 @@
 package Models;
 
+import java.util.Date;
+
 public class Transaction {
-    private int transactionId;
+    private String id;
+    private String label;
     private double amount;
-    private int accountSourceId;
-    private int accountDestinationId;
+    private Date date;
+    private TransactionType type;
 
-    public Transaction(int transactionId, double amount, int accountSourceId, int accountDestinationId) {
-        this.transactionId = transactionId;
+    public Transaction(String id, String label, double amount, TransactionType type) {
+        this.id = id;
+        this.label = label;
         this.amount = amount;
-        this.accountSourceId = accountSourceId;
-        this.accountDestinationId = accountDestinationId;
+        this.date = new Date(); // La date de la transaction est la date actuelle
+        this.type = type;
     }
 
-    // Getters and setters
-
-    public int getTransactionId() {
-        return transactionId;
+    // Getters et setters pour chaque attribut
+    public String getId() {
+        return id;
     }
 
-    public void setTransactionId(int transactionId) {
-        this.transactionId = transactionId;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public double getAmount() {
@@ -31,19 +42,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public int getAccountSourceId() {
-        return accountSourceId;
+    public Date getDate() {
+        return date;
     }
 
-    public void setAccountSourceId(int accountSourceId) {
-        this.accountSourceId = accountSourceId;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public int getAccountDestinationId() {
-        return accountDestinationId;
+    public TransactionType getType() {
+        return type;
     }
 
-    public void setAccountDestinationId(int accountDestinationId) {
-        this.accountDestinationId = accountDestinationId;
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 }
