@@ -67,18 +67,6 @@ INSERT INTO Account (id, name, balance, last_update, currency_id, type_id) VALUE
     ('A123', 'Main Bank Account', 1500.75, '2023-12-08 15:45:00', 'USD', 1),
     ('A456', 'Wallet', 50.20, '2023-12-09 10:15:00', 'EUR', 2);
 
--- Création de la table TransactionAccount (relation many-to-many entre Account et Transaction)
-CREATE TABLE IF NOT EXISTS TransactionAccount (
-    account_id VARCHAR(50) REFERENCES Account(id),
-    transaction_id VARCHAR(50) REFERENCES Transaction(id),
-    PRIMARY KEY (account_id, transaction_id)
-);
-
--- Inserts pour TransactionAccount (relation many-to-many)
-INSERT INTO TransactionAccount (account_id, transaction_id) VALUES
-    ('A123', '1'),
-    ('A456', '2');
-
 -- Création de la table CurrencyValue
 CREATE TABLE IF NOT EXISTS CurrencyValue (
     id SERIAL PRIMARY KEY,
