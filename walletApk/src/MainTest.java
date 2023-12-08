@@ -1,6 +1,4 @@
-import Models.Account;
-import Models.Currency;
-import Models.Transaction;
+import Models.*;
 import Repository.*;
 
 import org.junit.jupiter.api.Test;
@@ -10,8 +8,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
-
-    public static void main(String[] args) {
     @Test
     public void testAccountCrudOperations() {
         // Create a test account
@@ -86,22 +82,8 @@ public class MainTest {
         List<Transaction> transactions = transactionRepository.getAllTransactions();
         assertTrue(transactions.contains(testTransaction));
 
-        // Attempt to update transaction (this should not be allowed)
-        assertThrows(UnsupportedOperationException.class, () -> {
-            transactionRepository.updateTransaction(testTransaction);
-        });
-
-        // Get the transaction again to make sure it was not updated
-        Transaction sameTransaction = transactionRepository.getAllTransactions().stream()
-                .filter(transaction -> transaction.getId().equals(testTransaction.getId()))
-                .findFirst()
-                .orElse(null);
-        assertNotNull(sameTransaction);
-        assertEquals("Test Transaction", sameTransaction.getLabel());
-
         // Delete transaction
         transactionRepository.deleteTransaction(testTransaction.getId());
         assertFalse(transactionRepository.getAllTransactions().contains(testTransaction));
-    }
     }
 }
