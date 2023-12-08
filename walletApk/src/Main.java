@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
 
+    public static void main(String[] args) {
     @Test
     public void testAccountCrudOperations() {
         // Create a test account
@@ -101,5 +102,6 @@ public class MainTest {
         // Delete transaction
         transactionRepository.deleteTransaction(testTransaction.getId());
         assertFalse(transactionRepository.getAllTransactions().contains(testTransaction));
+    }
     }
 }
