@@ -110,9 +110,12 @@ public class Account {
         return balanceAtDate;
     }
 
+
     public double getCurrentBalance() {
         return balance; // Retourne le solde actuel stocké dans l'attribut 'balance'
     }
+
+
 
     // Foonction pour obtenir l'historique de la balance
     public SortedMap<Date, Double> getBalanceHistory(Date startDate, Date endDate) {

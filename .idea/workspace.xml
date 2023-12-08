@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f72b4a7e-3306-45b6-8cc7-45b72abf30c5" name="Changes" comment="" />
+    <list default="true" id="f72b4a7e-3306-45b6-8cc7-45b72abf30c5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/walletApk/src/Repository/AccountRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/walletApk/src/Repository/CurrencyRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/walletApk/src/Repository/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Wallet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Wallet.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/walletApk/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/walletApk/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/walletApk/src/Models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/walletApk/src/Models/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/walletApk/src/Repository/AccountCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/walletApk/src/Repository/AccountCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/walletApk/src/Repository/CurrencyCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/walletApk/src/Repository/CurrencyCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/walletApk/src/Repository/TransactionCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/walletApk/src/Repository/TransactionCrudOperations.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,18 +37,19 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "TD1-Wallet-STD22033-STD22119",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/lanx4/Downloads/postgresql.jar",
+    "last_opened_file_path": "C:/Users/lanx4/Downloads/junit-4.13.2.jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager",
@@ -67,5 +79,8 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

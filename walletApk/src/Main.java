@@ -1,97 +1,105 @@
 import Models.Account;
 import Models.Currency;
 import Models.Transaction;
-import Repository.AccountCrudOperations;
-import Repository.CurrencyCrudOperations;
-import Repository.TransactionCrudOperations;
+import Repository.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class Main {
+import static org.junit.jupiter.api.Assertions.*;
 
-    public static void main(String[] args) {
-        // Tests pour AccountCrudOperations
-        testAccountCrudOperations();
+public class MainTest {
 
-        // Tests pour CurrencyCrudOperations
-        testCurrencyCrudOperations();
+    @Test
+    public void testAccountCrudOperations() {
+        // Create a test account
+        Account testAccount = new Account("TEST_ACC", "Test Account", 1000.0, new java.util.Date(), new Currency("USD", "US Dollar", "USD"), AccountType.BANK);
 
-        // Tests pour TransactionCrudOperations
-        testTransactionCrudOperations();
+        // Add account
+        AccountCrudOperations accountRepository = new AccountRepository();
+        accountRepository.addAccount(testAccount);
+
+        // Get all accounts
+        List<Account> accounts = accountRepository.getAllAccounts();
+        assertTrue(accounts.contains(testAccount));
+
+        // Update account
+        testAccount.setName("Updated Test Account");
+        accountRepository.updateAccount(testAccount);
+
+        // Get updated account
+        Account updatedAccount = accountRepository.getAllAccounts().stream()
+                .filter(account -> account.getId().equals(testAccount.getId()))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(updatedAccount);
+        assertEquals("Updated Test Account", updatedAccount.getName());
+
+        // Delete account
+        accountRepository.deleteAccount(testAccount.getId());
+        assertFalse(accountRepository.getAllAccounts().contains(testAccount));
     }
 
-    private static void testAccountCrudOperations() {
-        AccountCrudOperations accountCrudOperations = new AccountCrudOperations();
+    @Test
+    public void testCurrencyCrudOperations() {
+        // Create a test currency
+        Currency testCurrency = new Currency("TEST_CURR", "Test Currency", "TC");
 
-        // Test d'ajout d'un compte
-        Account newAccount = new Account(0, "John Doe", 1000.0, 1);
-        accountCrudOperations.addAccount(newAccount);
+        // Add currency
+        CurrencyCrudOperations currencyRepository = new CurrencyRepository();
+        currencyRepository.addCurrency(testCurrency);
 
-        // Test de récupération de tous les comptes
-        List<Account> allAccounts = accountCrudOperations.getAllAccounts();
-        System.out.println("All Accounts:");
-        allAccounts.forEach(System.out::println);
+        // Get all currencies
+        List<Currency> currencies = currencyRepository.getAllCurrencies();
+        assertTrue(currencies.contains(testCurrency));
 
-        // Test de mise à jour d'un compte
-        Account accountToUpdate = allAccounts.get(0);
-        accountToUpdate.setBalance(1500.0);
-        accountCrudOperations.updateAccount(accountToUpdate);
+        // Update currency
+        testCurrency.setName("Updated Test Currency");
+        currencyRepository.updateCurrency(testCurrency);
 
-        // Test de suppression d'un compte
-        int accountIdToDelete = accountToUpdate.getAccountId();
-        accountCrudOperations.deleteAccount(accountIdToDelete);
+        // Get updated currency
+        Currency updatedCurrency = currencyRepository.getAllCurrencies().stream()
+                .filter(currency -> currency.getId().equals(testCurrency.getId()))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(updatedCurrency);
+        assertEquals("Updated Test Currency", updatedCurrency.getName());
 
-        // Fermeture de la connexion
-        accountCrudOperations.closeConnection();
+        // Delete currency
+        currencyRepository.deleteCurrency(testCurrency.getId());
+        assertFalse(currencyRepository.getAllCurrencies().contains(testCurrency));
     }
 
-    private static void testCurrencyCrudOperations() {
-        CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations();
+  @Test
+    public void testTransactionCrudOperations() {
+        TransactionCrudOperations transactionRepository = new TransactionRepository();
 
-        // Test d'ajout d'une devise
-        Currency newCurrency = new Currency(0, "YEN", 120.5);
-        currencyCrudOperations.addCurrency(newCurrency);
+        // Create a test transaction
+        Transaction testTransaction = new Transaction("TEST_TRANS", "Test Transaction", 500.0, TransactionType.DEBIT);
 
-        // Test de récupération de toutes les devises
-        List<Currency> allCurrencies = currencyCrudOperations.getAllCurrencies();
-        System.out.println("All Currencies:");
-        allCurrencies.forEach(System.out::println);
+        // Add transaction
+        transactionRepository.addTransaction(testTransaction);
 
-        // Test de mise à jour d'une devise
-        Currency currencyToUpdate = allCurrencies.get(0);
-        currencyToUpdate.setExchangeRate(130.0);
-        currencyCrudOperations.updateCurrency(currencyToUpdate);
+        // Get all transactions
+        List<Transaction> transactions = transactionRepository.getAllTransactions();
+        assertTrue(transactions.contains(testTransaction));
 
-        // Test de suppression d'une devise
-        int currencyIdToDelete = currencyToUpdate.getCurrencyId();
-        currencyCrudOperations.deleteCurrency(currencyIdToDelete);
+        // Attempt to update transaction (this should not be allowed)
+        assertThrows(UnsupportedOperationException.class, () -> {
+            transactionRepository.updateTransaction(testTransaction);
+        });
 
-        // Fermeture de la connexion
-        currencyCrudOperations.closeConnection();
-    }
+        // Get the transaction again to make sure it was not updated
+        Transaction sameTransaction = transactionRepository.getAllTransactions().stream()
+                .filter(transaction -> transaction.getId().equals(testTransaction.getId()))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(sameTransaction);
+        assertEquals("Test Transaction", sameTransaction.getLabel());
 
-    private static void testTransactionCrudOperations() {
-        TransactionCrudOperations transactionCrudOperations = new TransactionCrudOperations();
-
-        // Test d'ajout d'une transaction
-        Transaction newTransaction = new Transaction(0, 2000.0, 1, 2);
-        transactionCrudOperations.addTransaction(newTransaction);
-
-        // Test de récupération de toutes les transactions
-        List<Transaction> allTransactions = transactionCrudOperations.getAllTransactions();
-        System.out.println("All Transactions:");
-        allTransactions.forEach(System.out::println);
-
-        // Test de mise à jour d'une transaction
-        Transaction transactionToUpdate = allTransactions.get(0);
-        transactionToUpdate.setAmount(2500.0);
-        transactionCrudOperations.updateTransaction(transactionToUpdate);
-
-        // Test de suppression d'une transaction
-        int transactionIdToDelete = transactionToUpdate.getTransactionId();
-        transactionCrudOperations.deleteTransaction(transactionIdToDelete);
-
-        // Fermeture de la connexion
-        transactionCrudOperations.closeConnection();
+        // Delete transaction
+        transactionRepository.deleteTransaction(testTransaction.getId());
+        assertFalse(transactionRepository.getAllTransactions().contains(testTransaction));
     }
 }
