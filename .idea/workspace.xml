@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f72b4a7e-3306-45b6-8cc7-45b72abf30c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Wallet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Wallet.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/walletApk/src/Models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/walletApk/src/Models/Account.java" afterDir="false" />
-    </list>
+    <list default="true" id="f72b4a7e-3306-45b6-8cc7-45b72abf30c5" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +17,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2Z56vRZDQCj2faAmvG0Pn9eSzNm" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
