@@ -114,6 +114,7 @@ public class Account {
         return balance; // Retourne le solde actuel stocké dans l'attribut 'balance'
     }
 
+    // Foonction pour obtenir l'historique de la balance
     public SortedMap<Date, Double> getBalanceHistory(Date startDate, Date endDate) {
         SortedMap<Date, Double> balanceHistory = new TreeMap<>();
         double runningBalance = getBalanceAt(startDate); // Initialiser le solde courant au solde avant la startDate
