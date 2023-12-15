@@ -8,6 +8,7 @@ import Repository.AccountRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccountService {
@@ -18,48 +19,30 @@ public class AccountService {
 
     public Account getAccountById(String id) {
         Account account = accountRepo.getById(id);
-        List<Transaction> transactionsList = transactionService.getALlTransactionsByAccoundId(id);
-        account.setBalance(accountRepo.getBalanceNow(id).getValue());
-        if (transactionsList != null) {
-            account.setTransactionList(transactionsList);
-        }
-
         return account;
     }
 
     public List<Account> getAllAccounts() {
-        List<Account> accounts = accountRepo.findAll();
-        for (Account account : accounts) {
-            List<Transaction> transactionsList = transactionService.getALlTransactionsByAccoundId(account.getId());
-            account.setBalance(accountRepo.getBalanceNow(account.getId()).getValue());
-            if (transactionsList != null) {
-                account.setTransactionList(transactionsList);
+        List<Account> accounts = accountRepo.getAllAccounts();
+        return accounts;
+    }
+
+    public Account saveAccount(Account account, String currencyCode) {
+        for (Currency curr : currencyService.getAllCurrencies()) {
+            if(curr.getCode().equals(currencyCode)) {
+                account.setCurrency(curr);
             }
+        }
+        accountRepo.addAccount(account);
+        return account;
+    }
+
+    public List<Account> saveAllAccounts(List<Account> accounts) {
+        for (Account account : accounts) {
+            saveAccount(account, "MGA");
+            accounts.add(account);
         }
         return accounts;
     }
 
-    public Account saveAccount(Account Account, String currencyCode) {
-        for (Currency curr : currencyService.getAllCurrencies()) {
-            if(curr.getCode().equals(currencyCode)) {
-                Account.setCurrency(curr);
-            }
-        }
-        return accountRepo.save(Account);
-    }
-
-    public List<Account> saveAllAccounts(List<Account> accounts) {
-        return accountRepo.saveAll(accounts);
-    }
-
-    public List<BalanceHistory> getBalancesHistory(String id) {
-        return accountRepo.getBalanceHistory(id, null, null);
-    }
-
-    public List<BalanceHistory> getBalancesHistoryWithDate(String id, LocalDateTime startDatetime, LocalDateTime endDatetime) {
-        Timestamp start = Timestamp.valueOf(startDatetime);
-        Timestamp end = Timestamp.valueOf(endDatetime);
-        return accountRepo.getBalanceHistory(id, start, end);
-    }
-}
 }

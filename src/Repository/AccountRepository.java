@@ -8,6 +8,15 @@ public class AccountRepository implements AccountCrudOperations {
 
     private List<Account> accounts = new ArrayList<>();
 
+    public Account getById(String id) {
+        for (Account account : accounts) {
+            if (account.getId().equals(id)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void addAccount(Account account) {
         accounts.add(account);
@@ -25,7 +34,7 @@ public class AccountRepository implements AccountCrudOperations {
 
     @Override
     public void updateAccount(Account account) {
-        int index = indexOfAccount(account.getId());
+        int index = accounts.indexOf(account);
         if (index != -1) {
             accounts.set(index, account);
         }

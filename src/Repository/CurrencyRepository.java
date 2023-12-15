@@ -1,6 +1,7 @@
 package Repository;
 
 import Models.Currency;
+import Models.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,15 @@ import java.util.List;
 public class CurrencyRepository implements CurrencyCrudOperations {
 
     private List<Currency> currencies = new ArrayList<>();
+
+    public Currency getById(String id) {
+        for (Currency currencie : currencies) {
+            if (currencie.getId().equals(id)) {
+                return currencie;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void addCurrency(Currency currency) {

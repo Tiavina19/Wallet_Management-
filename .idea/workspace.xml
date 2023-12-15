@@ -6,6 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="f72b4a7e-3306-45b6-8cc7-45b72abf30c5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CategoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CategoryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CurrencyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CurrencyRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CurrencyValueRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CurrencyValueRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Services/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Services/CurrencyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/CurrencyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Services/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +45,20 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="walletApk" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -44,7 +70,7 @@
       <workItem from="1701699823812" duration="118000" />
       <workItem from="1702627611039" duration="7000" />
       <workItem from="1702629955009" duration="15000" />
-      <workItem from="1702630006648" duration="487000" />
+      <workItem from="1702630006648" duration="4798000" />
     </task>
     <servers />
   </component>

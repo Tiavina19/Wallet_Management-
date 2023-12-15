@@ -41,6 +41,7 @@ public class CurrencyService {
     }
 
     public CurrencyValue saveCurrencyValue(CurrencyValue toSave) {
-        return currencyValueRepo.save(toSave);
+        currencyValueRepo.addCurrencyValue(toSave);
+        return toSave;
     }
 }

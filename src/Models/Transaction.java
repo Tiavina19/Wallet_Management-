@@ -17,6 +17,11 @@ public class Transaction {
         this.type = type;
     }
 
+    public Transaction(String label, double amount) {
+        this.label = label;
+        this.amount = amount;
+    }
+
     // Getters et setters pour chaque attribut
     public String getId() {
         return id;

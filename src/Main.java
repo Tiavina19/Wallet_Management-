@@ -1,9 +1,8 @@
 import Models.Account;
 import Models.Currency;
+import Models.DBConnection;
 import Models.Transaction;
-import Repository.AccountCrudOperations;
-import Repository.CurrencyCrudOperations;
-import Repository.TransactionCrudOperations;
+import Repository.*;
 
 import java.util.List;
 
@@ -21,35 +20,35 @@ public class Main {
     }
 
     private static void testAccountCrudOperations() {
-        AccountCrudOperations accountCrudOperations = new AccountCrudOperations();
+        AccountRepository accountCrudOperations = new AccountRepository();
 
         // Test d'ajout d'un compte
-        Account newAccount = new Account(0, "John Doe", 1000.0, 1);
+        Account newAccount = new Account("John Doe", 1000.0);
         accountCrudOperations.addAccount(newAccount);
 
         // Test de récupération de tous les comptes
         List<Account> allAccounts = accountCrudOperations.getAllAccounts();
-        System.out.println("All Accounts:");
-        allAccounts.forEach(System.out::println);
+        // System.out.println("All Accounts:");
+        // allAccounts.forEach(System.out::println);
 
         // Test de mise à jour d'un compte
         Account accountToUpdate = allAccounts.get(0);
-        accountToUpdate.setBalance(1500.0);
-        accountCrudOperations.updateAccount(accountToUpdate);
+        // accountToUpdate.setBalance(1500.0);
+        // accountCrudOperations.updateAccount(accountToUpdate);
 
         // Test de suppression d'un compte
-        int accountIdToDelete = accountToUpdate.getAccountId();
-        accountCrudOperations.deleteAccount(accountIdToDelete);
+        String accountIdToDelete = accountToUpdate.getId();
+        // accountCrudOperations.deleteAccount(accountIdToDelete);
 
         // Fermeture de la connexion
-        accountCrudOperations.closeConnection();
+        DBConnection.closeConnection();
     }
 
     private static void testCurrencyCrudOperations() {
-        CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations();
+        CurrencyRepository currencyCrudOperations = new CurrencyRepository();
 
         // Test d'ajout d'une devise
-        Currency newCurrency = new Currency(0, "YEN", 120.5);
+        Currency newCurrency = new Currency("Yen", "YEN");
         currencyCrudOperations.addCurrency(newCurrency);
 
         // Test de récupération de toutes les devises
@@ -58,40 +57,40 @@ public class Main {
         allCurrencies.forEach(System.out::println);
 
         // Test de mise à jour d'une devise
-        Currency currencyToUpdate = allCurrencies.get(0);
-        currencyToUpdate.setExchangeRate(130.0);
-        currencyCrudOperations.updateCurrency(currencyToUpdate);
+        // Currency currencyToUpdate = allCurrencies.get(0);
+        // currencyToUpdate.setExchangeRate(130.0);
+        // currencyCrudOperations.updateCurrency(currencyToUpdate);
 
         // Test de suppression d'une devise
-        int currencyIdToDelete = currencyToUpdate.getCurrencyId();
-        currencyCrudOperations.deleteCurrency(currencyIdToDelete);
+        // String currencyIdToDelete = currencyToUpdate.getId();
+        // currencyCrudOperations.deleteCurrency(currencyIdToDelete);
 
         // Fermeture de la connexion
-        currencyCrudOperations.closeConnection();
+        DBConnection.closeConnection();
     }
 
     private static void testTransactionCrudOperations() {
-        TransactionCrudOperations transactionCrudOperations = new TransactionCrudOperations();
+        TransactionRepository transactionCrudOperations = new TransactionRepository();
 
         // Test d'ajout d'une transaction
-        Transaction newTransaction = new Transaction(0, 2000.0, 1, 2);
-        transactionCrudOperations.addTransaction(newTransaction);
+        Transaction newTransaction = new Transaction("Salary", 2000.0);
+        // transactionCrudOperations.addTransaction(newTransaction);
 
         // Test de récupération de toutes les transactions
         List<Transaction> allTransactions = transactionCrudOperations.getAllTransactions();
-        System.out.println("All Transactions:");
-        allTransactions.forEach(System.out::println);
+        // System.out.println("All Transactions:");
+        // allTransactions.forEach(System.out::println);
 
         // Test de mise à jour d'une transaction
-        Transaction transactionToUpdate = allTransactions.get(0);
-        transactionToUpdate.setAmount(2500.0);
-        transactionCrudOperations.updateTransaction(transactionToUpdate);
+        // Transaction transactionToUpdate = allTransactions.get(0);
+        // transactionToUpdate.setAmount(2500.0);
+        // transactionCrudOperations.updateTransaction(transactionToUpdate);
 
         // Test de suppression d'une transaction
-        int transactionIdToDelete = transactionToUpdate.getTransactionId();
-        transactionCrudOperations.deleteTransaction(transactionIdToDelete);
+        // String transactionIdToDelete = transactionToUpdate.getId();
+        // transactionCrudOperations.deleteTransaction(transactionIdToDelete);
 
         // Fermeture de la connexion
-        transactionCrudOperations.closeConnection();
+        DBConnection.closeConnection();
     }
 }

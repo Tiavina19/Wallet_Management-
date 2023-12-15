@@ -21,6 +21,13 @@ public class Account {
         this.transactions = new ArrayList<>();
     }
 
+    public Account(String name, double balance) {
+        this.lastUpdate = lastUpdate;
+        this.currency = currency;
+        this.type = type;
+        this.transactions = new ArrayList<>();
+    }
+
     // Getters et setters pour chaque attribut
     public String getId() {
         return id;

@@ -11,6 +11,11 @@ public class Currency {
         this.code = code;
     }
 
+    public Currency(String name, String code) {
+        this.name = name;
+        this.code = code;
+    }
+
     // Getters et setters pour chaque attribut
     public String getId() {
         return id;
@@ -34,5 +39,14 @@ public class Currency {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }

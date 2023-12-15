@@ -1,6 +1,7 @@
 package Repository;
 
 import Models.Category;
+import Models.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,15 @@ import java.util.List;
 public class CategoryRepository implements CategoryCrudOperations {
 
     private List<Category> categories = new ArrayList<>();
+
+    public Category getById(String id) {
+        for (Category categorie : categories) {
+            if (categorie.getId().equals(id)) {
+                return categorie;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void addCategory(Category category) {

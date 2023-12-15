@@ -20,14 +20,14 @@ public class TransactionService {
 
     public Account saveTransaction(Transaction transaction) {
         AccountService accountService = new AccountService();
-        Account account = accountService.getAccountById(transaction.getAccountId());
+        Account account = accountService.getAccountById(transaction.getId());
         Double balance = account.getBalance();
         if (!account.getType().equals("Bank") && balance < transaction.getAmount() && transaction.getType().equals("DEBIT")) {
             System.out.println("Transaction failed: balance not enough.");
             return null;
         }
-        transactionRepo.save(transaction);
-        return accountService.getAccountById(transaction.getAccountId());
+        transactionRepo.addTransaction(transaction);
+        return accountService.getAccountById(transaction.getId());
     }
 
     public List<Account> saveAllTransactions(List<Transaction> transactions) {
@@ -38,7 +38,4 @@ public class TransactionService {
         return accounts;
     }
 
-    public List<Transaction> getALlTransactionsByAccoundId(String id) {
-        return transactionRepo.findAllByAccountId(id);
-    }
 }
