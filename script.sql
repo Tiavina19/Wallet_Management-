@@ -43,26 +43,40 @@ INSERT INTO Transaction (amount, account_source_id, account_destination_id) VALU
     (1500.00, 1, 2),
     (5000.00, 2, 1);
 
-
-SELECT (
-            SUM(CASE WHEN tr.transactiontype = 'DEBIT' THEN 'DEBIT' ELSE 0 END) -
-            SUM(CASE WHEN tr.transactiontype = 'CREDIT' THEN 'CREDIT' ELSE 0 END)
-        ) AS total_amount
+-- Fonction pour calculer la somme des entrées et sorties d'argent pour un compte donné dans une plage de dates spécifiée
+CREATE OR REPLACE FUNCTION total_amount(account_id INT, start_date TIMESTAMP, end_date TIMESTAMP)
+RETURNS DOUBLE PRECISION AS $$
+DECLARE
+    total DOUBLE PRECISION;
+BEGIN
+    SELECT (
+        SUM(CASE WHEN tr.transactiontype = 'DEBIT' THEN tr.amount ELSE 0 END) -
+        SUM(CASE WHEN tr.transactiontype = 'CREDIT' THEN tr.amount ELSE 0 END)
+    ) INTO total
     FROM "balance_history" bh
-        INNER JOIN "account" acc ON acc.id = bh.accountid
-        INNER JOIN "transaction" tr ON tr.accountid = acc.id
-    WHERE bh.accountId = 'ACCOUNT_ID'
-    AND updateDateTime BETWEEN 'START_DATE' AND 'END_DATE';
+    INNER JOIN "account" acc ON acc.id = bh.accountid
+    INNER JOIN "transaction" tr ON tr.accountid = acc.id
+    WHERE bh.accountId = account_id
+    AND bh.updateDateTime BETWEEN start_date AND end_date;
 
+    RETURN total;
+END; $$
+LANGUAGE plpgsql;
 
-
+-- Fonction pour calculer la somme des montants de chaque catégorie pour un compte donné dans une plage de dates spécifiée
+CREATE OR REPLACE FUNCTION total_amount_per_category(account_id INT, start_date TIMESTAMP, end_date TIMESTAMP)
+RETURNS TABLE(category_id INT, category_name VARCHAR(255), total_amount DOUBLE PRECISION) AS $$
+BEGIN
+    RETURN QUERY
     SELECT c.id AS category_id,
     c.name AS category_name,
-    (SUM(CASE WHEN bh.value IS NOT NULL THEN bh.value ELSE 0 END)) AS total_amount
+    COALESCE(SUM(bh.value), 0) AS total_amount
     FROM "category" c
     LEFT JOIN "transaction" tr ON tr.categoryid = c.id
     LEFT JOIN "account" acc ON acc.id = tr.accountid
     LEFT JOIN "balance_history" bh ON bh.accountid = acc.id
-        AND bh.accountId = 'ACCOUNT_ID'
-        AND bh.updateDateTime BETWEEN  'START_DATE' AND 'END_DATE'
+    WHERE bh.accountId = account_id
+    AND bh.updateDateTime BETWEEN start_date AND end_date
     GROUP BY c.id, c.name;
+END; $$
+LANGUAGE plpgsql;
