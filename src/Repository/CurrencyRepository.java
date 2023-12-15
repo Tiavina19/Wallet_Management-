@@ -1,7 +1,6 @@
 package Repository;
 
 import Models.Currency;
-import Models.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
