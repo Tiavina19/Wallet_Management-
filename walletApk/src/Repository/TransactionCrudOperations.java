@@ -2,85 +2,66 @@ package Repository;
 
 import Models.DBConnection;
 import Models.Transaction;
+import Models.TransactionType;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionCrudOperations {
-    private final Connection connection;
-
-    public TransactionCrudOperations() {
-        // Obtenez la connexion depuis la classe DBConnection
-        this.connection = DBConnection.getConnection();
-    }
-
+public interface TransactionCrudOperations {
     // Méthode pour ajouter une transaction
-    public void addTransaction(Transaction transaction) {
-        String query = "INSERT INTO Transaction (amount, account_source_id, account_destination_id) VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setDouble(1, transaction.getAmount());
-            preparedStatement.setInt(2, transaction.getAccountSourceId());
-            preparedStatement.setInt(3, transaction.getAccountDestinationId());
-            preparedStatement.executeUpdate();
-            System.out.println("Transaction added successfully.");
+    default void addTransaction(Transaction transaction) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "INSERT INTO Transaction (id, label, amount, date, type_id) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, transaction.getId());
+                preparedStatement.setString(2, transaction.getLabel());
+                preparedStatement.setDouble(3, transaction.getAmount());
+                preparedStatement.setTimestamp(4, new Timestamp(transaction.getDate().getTime()));
+                preparedStatement.setInt(5, transaction.getType().ordinal() + 1); // Assuming enum values start from 1
+                preparedStatement.executeUpdate();
+                System.out.println("Transaction added successfully.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to add transaction: " + e.getMessage());
         }
     }
 
     // Méthode pour récupérer toutes les transactions
-    public List<Transaction> getAllTransactions() {
+    default List<Transaction> getAllTransactions() {
         List<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT * FROM Transaction";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int transactionId = resultSet.getInt("transaction_id");
-                double amount = resultSet.getDouble("amount");
-                int accountSourceId = resultSet.getInt("account_source_id");
-                int accountDestinationId = resultSet.getInt("account_destination_id");
-                Transaction transaction = new Transaction(transactionId, amount, accountSourceId, accountDestinationId);
-                transactions.add(transaction);
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "SELECT * FROM Transaction";
+            try (Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(query)) {
+                while (resultSet.next()) {
+                    String id = resultSet.getString("id");
+                    String label = resultSet.getString("label");
+                    double amount = resultSet.getDouble("amount");
+                    Timestamp date = resultSet.getTimestamp("date");
+                    int typeId = resultSet.getInt("type_id");
+                    Transaction transaction = new Transaction(id, label, amount, TransactionType.values()[typeId - 1]);
+                    transaction.setDate(date);
+                    transactions.add(transaction);
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to get transactions: " + e.getMessage());
         }
         return transactions;
     }
 
-    // Méthode pour mettre à jour une transaction
-    public void updateTransaction(Transaction transaction) {
-        String query = "UPDATE Transaction SET amount=?, account_source_id=?, account_destination_id=? WHERE transaction_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setDouble(1, transaction.getAmount());
-            preparedStatement.setInt(2, transaction.getAccountSourceId());
-            preparedStatement.setInt(3, transaction.getAccountDestinationId());
-            preparedStatement.setInt(4, transaction.getTransactionId());
-            preparedStatement.executeUpdate();
-            System.out.println("Transaction updated successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Méthode pour supprimer une transaction
-    public void deleteTransaction(int transactionId) {
-        String query = "DELETE FROM Transaction WHERE transaction_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, transactionId);
-            preparedStatement.executeUpdate();
-            System.out.println("Transaction deleted successfully.");
+    default void deleteTransaction(String transactionId) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "DELETE FROM Transaction WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, transactionId);
+                preparedStatement.executeUpdate();
+                System.out.println("Transaction deleted successfully.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to delete transaction: " + e.getMessage());
         }
-    }
-
-    // Méthode pour fermer la connexion (à appeler à la fin)
-    public void closeConnection() {
-        DBConnection.closeConnection();
     }
 }
