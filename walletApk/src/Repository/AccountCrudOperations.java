@@ -1,86 +1,85 @@
 package Repository;
 
-import Models.Account;
-import Models.DBConnection;
+import Models.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountCrudOperations {
-    private final Connection connection;
-
-    public AccountCrudOperations() {
-        // Obtenez la connexion depuis la classe DBConnection
-        this.connection = DBConnection.getConnection();
-    }
-
+public interface AccountCrudOperations {
     // Méthode pour ajouter un compte
-    public void addAccount(Account account) {
-        String query = "INSERT INTO Account (user_name, balance, currency_id) VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, account.getUserName());
-            preparedStatement.setDouble(2, account.getBalance());
-            preparedStatement.setInt(3, account.getCurrencyId());
-            preparedStatement.executeUpdate();
-            System.out.println("Account added successfully.");
+    default void addAccount(Account account) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "INSERT INTO Account (id, name, balance, last_update, currency_id, type_id) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, account.getId());
+                preparedStatement.setString(2, account.getName());
+                preparedStatement.setDouble(3, account.getBalance());
+                preparedStatement.setTimestamp(4, new Timestamp(account.getLastUpdate().getTime()));
+                preparedStatement.setString(5, account.getCurrency().getId());
+                preparedStatement.setInt(6, account.getType().ordinal() + 1); // Assuming enum values start from 1
+                preparedStatement.executeUpdate();
+                System.out.println("Account added successfully.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to add account: " + e.getMessage());
         }
     }
 
     // Méthode pour récupérer tous les comptes
-    public List<Account> getAllAccounts() {
+    default List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
-        String query = "SELECT * FROM Account";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int accountId = resultSet.getInt("account_id");
-                String userName = resultSet.getString("user_name");
-                double balance = resultSet.getDouble("balance");
-                int currencyId = resultSet.getInt("currency_id");
-                Account account = new Account(accountId, userName, balance, currencyId);
-                accounts.add(account);
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "SELECT * FROM Account";
+            try (Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(query)) {
+                while (resultSet.next()) {
+                    String id = resultSet.getString("id");
+                    String name = resultSet.getString("name");
+                    double balance = resultSet.getDouble("balance");
+                    Timestamp lastUpdate = resultSet.getTimestamp("last_update");
+                    String currencyId = resultSet.getString("currency_id");
+                    int typeId = resultSet.getInt("type_id");
+                    Account account = new Account(id, name, balance, lastUpdate, new Currency(currencyId, "", ""), AccountType.values()[typeId - 1]);
+                    accounts.add(account);
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to get accounts: " + e.getMessage());
         }
         return accounts;
     }
 
-    // Méthode pour mettre à jour un compte
-    public void updateAccount(Account account) {
-        String query = "UPDATE Account SET user_name=?, balance=?, currency_id=? WHERE account_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, account.getUserName());
-            preparedStatement.setDouble(2, account.getBalance());
-            preparedStatement.setInt(3, account.getCurrencyId());
-            preparedStatement.setInt(4, account.getAccountId());
-            preparedStatement.executeUpdate();
-            System.out.println("Account updated successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Méthode pour supprimer un compte
-    public void deleteAccount(int accountId) {
-        String query = "DELETE FROM Account WHERE account_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, accountId);
-            preparedStatement.executeUpdate();
-            System.out.println("Account deleted successfully.");
+    default void deleteAccount(String accountId) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "DELETE FROM Account WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, accountId);
+                preparedStatement.executeUpdate();
+                System.out.println("Account deleted successfully.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to delete account: " + e.getMessage());
         }
     }
 
-    // Méthode pour fermer la connexion (à appeler à la fin)
-    public void closeConnection() {
-        DBConnection.closeConnection();
+    // Méthode pour mettre à jour un compte
+    default void updateAccount(Account account) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "UPDATE Account SET name = ?, balance = ?, last_update = ?, currency_id = ?, type_id = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, account.getName());
+                preparedStatement.setDouble(2, account.getBalance());
+                preparedStatement.setTimestamp(3, new Timestamp(account.getLastUpdate().getTime()));
+                preparedStatement.setString(4, account.getCurrency().getId());
+                preparedStatement.setInt(5, account.getType().ordinal() + 1);
+                preparedStatement.setString(6, account.getId());
+                preparedStatement.executeUpdate();
+                System.out.println("Account updated successfully.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to update account: " + e.getMessage());}
     }
 }
+

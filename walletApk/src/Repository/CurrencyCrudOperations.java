@@ -3,81 +3,75 @@ package Repository;
 import Models.Currency;
 import Models.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrencyCrudOperations {
-    private Connection connection;
-
-    public CurrencyCrudOperations() {
-        // Obtenez la connexion depuis la classe DBConnection
-        this.connection = DBConnection.getConnection();
-    }
-
+public interface CurrencyCrudOperations {
     // Méthode pour ajouter une devise
-    public void addCurrency(Currency currency) {
-        String query = "INSERT INTO Currency (currency_name, exchange_rate) VALUES (?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, currency.getCurrencyName());
-            preparedStatement.setDouble(2, currency.getExchangeRate());
-            preparedStatement.executeUpdate();
-            System.out.println("Currency added successfully.");
+    default void addCurrency(Currency currency) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "INSERT INTO Currency (id, name, code) VALUES (?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, currency.getId());
+                preparedStatement.setString(2, currency.getName());
+                preparedStatement.setString(3, currency.getCode());
+                preparedStatement.executeUpdate();
+                System.out.println("Currency added successfully.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to add currency: " + e.getMessage());
         }
     }
 
     // Méthode pour récupérer toutes les devises
-    public List<Currency> getAllCurrencies() {
+    default List<Currency> getAllCurrencies() {
         List<Currency> currencies = new ArrayList<>();
-        String query = "SELECT * FROM Currency";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int currencyId = resultSet.getInt("currency_id");
-                String currencyName = resultSet.getString("currency_name");
-                double exchangeRate = resultSet.getDouble("exchange_rate");
-                Currency currency = new Currency(currencyId, currencyName, exchangeRate);
-                currencies.add(currency);
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "SELECT * FROM Currency";
+            try (Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery(query)) {
+                while (resultSet.next()) {
+                    String id = resultSet.getString("id");
+                    String name = resultSet.getString("name");
+                    String code = resultSet.getString("code");
+                    Currency currency = new Currency(id, name, code);
+                    currencies.add(currency);
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to get currencies: " + e.getMessage());
         }
         return currencies;
     }
 
-    // Méthode pour mettre à jour une devise
-    public void updateCurrency(Currency currency) {
-        String query = "UPDATE Currency SET currency_name=?, exchange_rate=? WHERE currency_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, currency.getCurrencyName());
-            preparedStatement.setDouble(2, currency.getExchangeRate());
-            preparedStatement.setInt(3, currency.getCurrencyId());
-            preparedStatement.executeUpdate();
-            System.out.println("Currency updated successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Méthode pour supprimer une devise
-    public void deleteCurrency(int currencyId) {
-        String query = "DELETE FROM Currency WHERE currency_id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, currencyId);
-            preparedStatement.executeUpdate();
-            System.out.println("Currency deleted successfully.");
+    default void deleteCurrency(String currencyId) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "DELETE FROM Currency WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, currencyId);
+                preparedStatement.executeUpdate();
+                System.out.println("Currency deleted successfully.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Failed to delete currency: " + e.getMessage());
         }
     }
 
-    // Méthode pour fermer la connexion (à appeler à la fin)
-    public void closeConnection() {
-        DBConnection.closeConnection();
+    // Méthode pour mettre à jour une devise
+    default void updateCurrency(Currency currency) {
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "UPDATE Currency SET name = ?, code = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, currency.getName());
+                preparedStatement.setString(2, currency.getCode());
+                preparedStatement.setString(3, currency.getId());
+                preparedStatement.executeUpdate();
+                System.out.println("Currency updated successfully.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to update currency: " + e.getMessage());
+        }
     }
 }

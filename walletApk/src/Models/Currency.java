@@ -1,39 +1,38 @@
 package Models;
 
 public class Currency {
-    private int currencyId;
-    private String currencyName;
-    private double exchangeRate;
+    private String id;
+    private String name;
+    private String code;
 
-    public Currency(int currencyId, String currencyName, double exchangeRate) {
-        this.currencyId = currencyId;
-        this.currencyName = currencyName;
-        this.exchangeRate = exchangeRate;
+    public Currency(String id, String name, String code) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
     }
 
-    // Getters and setters
-
-    public int getCurrencyId() {
-        return currencyId;
+    // Getters et setters pour chaque attribut
+    public String getId() {
+        return id;
     }
 
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getCurrencyName() {
-        return currencyName;
+    public String getName() {
+        return name;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getExchangeRate() {
-        return exchangeRate;
+    public String getCode() {
+        return code;
     }
 
-    public void setExchangeRate(double exchangeRate) {
-        this.exchangeRate = exchangeRate;
+    public void setCode(String code) {
+        this.code = code;
     }
 }
