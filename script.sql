@@ -42,3 +42,27 @@ CREATE TABLE IF NOT EXISTS Transaction (
 INSERT INTO Transaction (amount, account_source_id, account_destination_id) VALUES
     (1500.00, 1, 2),
     (5000.00, 2, 1);
+
+
+SELECT (
+            SUM(CASE WHEN tr.transactiontype = 'DEBIT' THEN 'DEBIT' ELSE 0 END) -
+            SUM(CASE WHEN tr.transactiontype = 'CREDIT' THEN 'CREDIT' ELSE 0 END)
+        ) AS total_amount
+    FROM "balance_history" bh
+        INNER JOIN "account" acc ON acc.id = bh.accountid
+        INNER JOIN "transaction" tr ON tr.accountid = acc.id
+    WHERE bh.accountId = 'ACCOUNT_ID'
+    AND updateDateTime BETWEEN 'START_DATE' AND 'END_DATE';
+
+
+
+    SELECT c.id AS category_id,
+    c.name AS category_name,
+    (SUM(CASE WHEN bh.value IS NOT NULL THEN bh.value ELSE 0 END)) AS total_amount
+    FROM "category" c
+    LEFT JOIN "transaction" tr ON tr.categoryid = c.id
+    LEFT JOIN "account" acc ON acc.id = tr.accountid
+    LEFT JOIN "balance_history" bh ON bh.accountid = acc.id
+        AND bh.accountId = 'ACCOUNT_ID'
+        AND bh.updateDateTime BETWEEN  'START_DATE' AND 'END_DATE'
+    GROUP BY c.id, c.name;
