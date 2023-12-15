@@ -66,5 +66,32 @@ public interface CategoryCrudOperations {
             System.err.println("Failed to update category: " + e.getMessage());
         }
     }
+
+    // Méthode pour récupérer les catégories pour un compte spécifique dans une plage de dates
+    default List<Category> getCategoriesForAccount(int accountId, Timestamp startDate, Timestamp endDate) {
+        List<Category> categories = new ArrayList<>();
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "SELECT DISTINCT c.* FROM Category c " +
+                    "JOIN Transaction tr ON tr.category_id = c.id " +
+                    "WHERE (tr.account_source_id = ? OR tr.account_destination_id = ?) " +
+                    "AND tr.transaction_date BETWEEN ? AND ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, accountId);
+                preparedStatement.setInt(2, accountId);
+                preparedStatement.setTimestamp(3, startDate);
+                preparedStatement.setTimestamp(4, endDate);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    Category category = new Category(id, name);
+                    categories.add(category);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to get categories: " + e.getMessage());
+        }
+        return categories;
+    }
 }
 

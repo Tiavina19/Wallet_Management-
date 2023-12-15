@@ -64,4 +64,31 @@ public interface TransactionCrudOperations {
             System.err.println("Failed to delete transaction: " + e.getMessage());
         }
     }
+    // Méthode pour récupérer les transactions pour un compte spécifique dans une plage de dates
+    default List<Transaction> getTransactionsForAccount(int accountId, Timestamp startDate, Timestamp endDate) {
+        List<Transaction> transactions = new ArrayList<>();
+        try (Connection connection = DBConnection.getConnection()) {
+            String query = "SELECT * FROM Transaction WHERE (account_source_id = ? OR account_destination_id = ?) AND transaction_date BETWEEN ? AND ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, accountId);
+                preparedStatement.setInt(2, accountId);
+                preparedStatement.setTimestamp(3, startDate);
+                preparedStatement.setTimestamp(4, endDate);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    String id = resultSet.getString("id");
+                    String label = resultSet.getString("label");
+                    double amount = resultSet.getDouble("amount");
+                    Timestamp date = resultSet.getTimestamp("date");
+                    int typeId = resultSet.getInt("type_id");
+                    Transaction transaction = new Transaction(id, label, amount, TransactionType.values()[typeId - 1]);
+                    transaction.setDate(date);
+                    transactions.add(transaction);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to get transactions: " + e.getMessage());
+        }
+        return transactions;
+    }
 }
