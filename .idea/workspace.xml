@@ -5,19 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f72b4a7e-3306-45b6-8cc7-45b72abf30c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Repository/CrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Models/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/CategoryAmount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/CategoryAmount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/DBConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/TotalAmount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/TotalAmount.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Models/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/AccountCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/AccountCrudOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/AccountRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/CategoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CategoryRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/CurrencyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CurrencyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/CurrencyValueRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CurrencyValueRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Services/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Services/CurrencyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/CurrencyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Services/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/BalanceHistoryCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/BalanceHistoryCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CategoryCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CategoryCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CurrencyCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CurrencyCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/CurrencyValueCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/CurrencyValueCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransactionCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransactionCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TransferCrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TransferCrudOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Services/DbManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Services/DbManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +32,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 8
+}]]></component>
   <component name="ProjectId" id="2Z56vRZDQCj2faAmvG0Pn9eSzNm" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -34,9 +43,13 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Voay/Desktop/Wallet_Management-",
+    "git-widget-placeholder": "TD2-Wallet-STD22033-STD22119",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/lanx4/Documents/Wallet_App",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",

@@ -18,7 +18,6 @@ public class DBConnection {
                 String url = System.getenv("DB_URL");
                 String user = System.getenv("DB_USER");
                 String password = System.getenv("DB_PASSWORD");
-
                 // Vérification que les variables d'environnement ne sont pas nulles
                 if (url != null && user != null && password != null) {
                     // Établissement de la connexion

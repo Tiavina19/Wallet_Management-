@@ -12,13 +12,12 @@ public interface TransactionCrudOperations {
     // Méthode pour ajouter une transaction
     default void addTransaction(Transaction transaction) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "INSERT INTO Transaction (id, label, amount, date, type_id) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Transaction (transaction_label, amount, transaction_date, type_id) VALUES (?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, transaction.getId());
-                preparedStatement.setString(2, transaction.getLabel());
-                preparedStatement.setDouble(3, transaction.getAmount());
-                preparedStatement.setTimestamp(4, new Timestamp(transaction.getDate().getTime()));
-                preparedStatement.setInt(5, transaction.getType().ordinal() + 1); // Assuming enum values start from 1
+                preparedStatement.setString(1, transaction.getLabel());
+                preparedStatement.setDouble(2, transaction.getAmount());
+                preparedStatement.setTimestamp(3, new Timestamp(transaction.getDate().getTime()));
+                preparedStatement.setInt(4, transaction.getType().ordinal() + 1); // Assuming enum values start from 1
                 preparedStatement.executeUpdate();
                 System.out.println("Transaction added successfully.");
             }
@@ -35,10 +34,10 @@ public interface TransactionCrudOperations {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {
                 while (resultSet.next()) {
-                    String id = resultSet.getString("id");
-                    String label = resultSet.getString("label");
+                    String id = String.valueOf(resultSet.getInt("transaction_id"));
+                    String label = resultSet.getString("transaction_label");
                     double amount = resultSet.getDouble("amount");
-                    Timestamp date = resultSet.getTimestamp("date");
+                    Timestamp date = resultSet.getTimestamp("transaction_date");
                     int typeId = resultSet.getInt("type_id");
                     Transaction transaction = new Transaction(id, label, amount, TransactionType.values()[typeId - 1]);
                     transaction.setDate(date);
@@ -54,9 +53,9 @@ public interface TransactionCrudOperations {
     // Méthode pour supprimer une transaction
     default void deleteTransaction(String transactionId) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "DELETE FROM Transaction WHERE id = ?";
+            String query = "DELETE FROM Transaction WHERE transaction_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, transactionId);
+                preparedStatement.setInt(1, Integer.parseInt(transactionId));
                 preparedStatement.executeUpdate();
                 System.out.println("Transaction deleted successfully.");
             }
@@ -64,6 +63,7 @@ public interface TransactionCrudOperations {
             System.err.println("Failed to delete transaction: " + e.getMessage());
         }
     }
+
     // Méthode pour récupérer les transactions pour un compte spécifique dans une plage de dates
     default List<Transaction> getTransactionsForAccount(int accountId, Timestamp startDate, Timestamp endDate) {
         List<Transaction> transactions = new ArrayList<>();
@@ -76,10 +76,10 @@ public interface TransactionCrudOperations {
                 preparedStatement.setTimestamp(4, endDate);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    String id = resultSet.getString("id");
-                    String label = resultSet.getString("label");
+                    String id = String.valueOf(resultSet.getInt("transaction_id"));
+                    String label = resultSet.getString("transaction_label");
                     double amount = resultSet.getDouble("amount");
-                    Timestamp date = resultSet.getTimestamp("date");
+                    Timestamp date = resultSet.getTimestamp("transaction_date");
                     int typeId = resultSet.getInt("type_id");
                     Transaction transaction = new Transaction(id, label, amount, TransactionType.values()[typeId - 1]);
                     transaction.setDate(date);

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class AccountRepository implements AccountCrudOperations {
 
-    private List<Account> accounts = new ArrayList<>();
+    private final List<Account> accounts = new ArrayList<>();
 
     public Account getById(String id) {
         for (Account account : accounts) {

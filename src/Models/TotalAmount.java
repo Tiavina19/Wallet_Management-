@@ -19,4 +19,11 @@ public class TotalAmount {
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
+
+    @Override
+    public String toString() {
+        return "TotalAmount{" +
+                "totalAmount=" + totalAmount +
+                '}';
+    }
 }

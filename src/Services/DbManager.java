@@ -19,8 +19,7 @@ public class DbManager {
             stmt.execute();
     
             double amount = stmt.getDouble(1);
-            TotalAmount totalAmount = new TotalAmount(amount);
-            return totalAmount;
+            return new TotalAmount(amount);
         }
     }
     

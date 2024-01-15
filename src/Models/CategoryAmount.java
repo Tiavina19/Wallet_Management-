@@ -4,14 +4,13 @@ public class CategoryAmount {
     private String categoryName;
     private double totalAmount;
 
-    // Constructors
-    public CategoryAmount() {
-        // Default constructor
-    }
-
-    public CategoryAmount(String categoryName, double totalAmount) {
+    public CategoryAmount(String categoryName) {
         this.categoryName = categoryName;
         this.totalAmount = totalAmount;
+    }
+
+    // Constructeur sans arguments
+    public CategoryAmount() {
     }
 
     // Getters and Setters
@@ -29,5 +28,13 @@ public class CategoryAmount {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoryAmount{" +
+                "categoryName='" + categoryName + '\'' +
+                ", totalAmount=" + totalAmount +
+                '}';
     }
 }

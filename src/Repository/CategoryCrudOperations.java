@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface CategoryCrudOperations {
+    // Méthode pour ajouter une catégorie
     default void addCategory(Category category) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "INSERT INTO Category (id, name) VALUES (?, ?)";
+            String query = "INSERT INTO Category (category_name) VALUES (?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, category.getId());
-                preparedStatement.setString(2, category.getName());
+                preparedStatement.setString(1, category.getName());
                 preparedStatement.executeUpdate();
                 System.out.println("Category added successfully.");
             }
@@ -21,6 +21,7 @@ public interface CategoryCrudOperations {
         }
     }
 
+    // Méthode pour récupérer toutes les catégories
     default List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
         try (Connection connection = DBConnection.getConnection()) {
@@ -28,8 +29,8 @@ public interface CategoryCrudOperations {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {
                 while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
+                    int id = resultSet.getInt("category_id");
+                    String name = resultSet.getString("category_name");
                     Category category = new Category(id, name);
                     categories.add(category);
                 }
@@ -40,9 +41,10 @@ public interface CategoryCrudOperations {
         return categories;
     }
 
+    // Méthode pour supprimer une catégorie
     default void deleteCategory(int categoryId) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "DELETE FROM Category WHERE id = ?";
+            String query = "DELETE FROM Category WHERE category_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, categoryId);
                 preparedStatement.executeUpdate();
@@ -53,9 +55,10 @@ public interface CategoryCrudOperations {
         }
     }
 
+    // Méthode pour mettre à jour une catégorie
     default void updateCategory(Category category) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "UPDATE Category SET name = ? WHERE id = ?";
+            String query = "UPDATE Category SET category_name = ? WHERE category_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, category.getName());
                 preparedStatement.setInt(2, category.getId());
@@ -72,7 +75,7 @@ public interface CategoryCrudOperations {
         List<Category> categories = new ArrayList<>();
         try (Connection connection = DBConnection.getConnection()) {
             String query = "SELECT DISTINCT c.* FROM Category c " +
-                    "JOIN Transaction tr ON tr.category_id = c.id " +
+                    "JOIN Transaction tr ON tr.category_id = c.category_id " +
                     "WHERE (tr.account_source_id = ? OR tr.account_destination_id = ?) " +
                     "AND tr.transaction_date BETWEEN ? AND ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -82,8 +85,8 @@ public interface CategoryCrudOperations {
                 preparedStatement.setTimestamp(4, endDate);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
+                    int id = resultSet.getInt("category_id");
+                    String name = resultSet.getString("category_name");
                     Category category = new Category(id, name);
                     categories.add(category);
                 }
@@ -94,4 +97,3 @@ public interface CategoryCrudOperations {
         return categories;
     }
 }
-

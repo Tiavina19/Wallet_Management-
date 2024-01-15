@@ -12,12 +12,12 @@ public interface BalanceHistoryCrudOperations {
     // Méthode pour ajouter un historique de solde
     default void addBalanceHistory(BalanceHistory balanceHistory) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "INSERT INTO BalanceHistory (id, value, update_date_time, account_id) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO BalanceHistory (history_id, value, update_date_time, account_id) VALUES (?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, balanceHistory.getId());
+                preparedStatement.setLong(1, Long.parseLong(balanceHistory.getId()));
                 preparedStatement.setDouble(2, balanceHistory.getValue());
-                preparedStatement.setTimestamp(3, new Timestamp(balanceHistory.getUpdateDateTime().getTime()));
-                preparedStatement.setString(4, balanceHistory.getAccountId());
+                preparedStatement.setTimestamp(3, balanceHistory.getUpdateDateTime());
+                preparedStatement.setLong(4, Long.parseLong(balanceHistory.getAccountId()));
                 preparedStatement.executeUpdate();
                 System.out.println("Balance history added successfully.");
             }
@@ -34,15 +34,15 @@ public interface BalanceHistoryCrudOperations {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {
                 while (resultSet.next()) {
-                    String id = resultSet.getString("id");
+                    String id = String.valueOf(resultSet.getLong("history_id"));
                     double value = resultSet.getDouble("value");
                     Timestamp updateDateTime = resultSet.getTimestamp("update_date_time");
-                    String accountId = resultSet.getString("account_id");
+                    String accountId = String.valueOf(resultSet.getLong("account_id"));
 
                     BalanceHistory history = new BalanceHistory();
                     history.setId(id);
                     history.setValue(value);
-                    history.setUpdateDateTime((Timestamp) new Date(updateDateTime.getTime()));
+                    history.setUpdateDateTime(updateDateTime);
                     history.setAccountId(accountId);
 
                     balanceHistories.add(history);
@@ -57,9 +57,9 @@ public interface BalanceHistoryCrudOperations {
     // Méthode pour supprimer un historique de solde
     default void deleteBalanceHistory(String balanceHistoryId) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "DELETE FROM BalanceHistory WHERE id = ?";
+            String query = "DELETE FROM BalanceHistory WHERE history_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, balanceHistoryId);
+                preparedStatement.setLong(1, Long.parseLong(balanceHistoryId));
                 preparedStatement.executeUpdate();
                 System.out.println("Balance history deleted successfully.");
             }
@@ -71,12 +71,12 @@ public interface BalanceHistoryCrudOperations {
     // Méthode pour mettre à jour un historique de solde
     default void updateBalanceHistory(BalanceHistory balanceHistory) {
         try (Connection connection = DBConnection.getConnection()) {
-            String query = "UPDATE BalanceHistory SET value = ?, update_date_time = ?, account_id = ? WHERE id = ?";
+            String query = "UPDATE BalanceHistory SET value = ?, update_date_time = ?, account_id = ? WHERE history_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setDouble(1, balanceHistory.getValue());
-                preparedStatement.setTimestamp(2, new Timestamp(balanceHistory.getUpdateDateTime().getTime()));
-                preparedStatement.setString(3, balanceHistory.getAccountId());
-                preparedStatement.setString(4, balanceHistory.getId());
+                preparedStatement.setTimestamp(2, balanceHistory.getUpdateDateTime());
+                preparedStatement.setLong(3, Long.parseLong(balanceHistory.getAccountId()));
+                preparedStatement.setLong(4, Long.parseLong(balanceHistory.getId()));
                 preparedStatement.executeUpdate();
                 System.out.println("Balance history updated successfully.");
             }

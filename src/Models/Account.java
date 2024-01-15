@@ -21,13 +21,6 @@ public class Account {
         this.transactions = new ArrayList<>();
     }
 
-    public Account(String name, double balance) {
-        this.lastUpdate = lastUpdate;
-        this.currency = currency;
-        this.type = type;
-        this.transactions = new ArrayList<>();
-    }
-
     // Getters et setters pour chaque attribut
     public String getId() {
         return id;
@@ -85,6 +78,19 @@ public class Account {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", balance=" + balance +
+                ", lastUpdate=" + lastUpdate +
+                ", transactions=" + transactions +
+                ", currency=" + currency +
+                ", type=" + type +
+                '}';
+    }
+
     public void performTransaction(Transaction transaction) {
         // Vérifier si le solde est suffisant pour les comptes non bancaires
         if (TransactionType.DEBIT.equals(transaction.getType()) && transaction.getAmount() > this.balance) {
@@ -102,29 +108,31 @@ public class Account {
         lastUpdate = new Date(); // La date de mise à jour est la date actuelle
     }
 
-    // Fonction pour avoir le solde à une telle heure
     public double getBalanceAt(Date date) {
         double balanceAtDate = 0;
+        boolean isBeforeFirstTransaction = date.getTime() < this.transactions.get(0).getDate().getTime();
+        if (isBeforeFirstTransaction) {
+            balanceAtDate = this.balance;
+        }
         for (Transaction transaction : transactions) {
-            if (transaction.getDate().before(date) || transaction.getDate().equals(date)) {
-                if (transaction.getType() == TransactionType.CREDIT) {
-                    balanceAtDate += transaction.getAmount();
-                } else if (transaction.getType() == TransactionType.DEBIT) {
+            if (transaction.getDate().getTime() <= date.getTime()) {
+                if (transaction.getType() == TransactionType.DEBIT) {
                     balanceAtDate -= transaction.getAmount();
+                } else if (transaction.getType() == TransactionType.CREDIT) {
+                    balanceAtDate += transaction.getAmount();
                 }
             }
         }
+
+        System.out.println("Balance at " + date + ": " + balanceAtDate);
         return balanceAtDate;
     }
-
-
     public double getCurrentBalance() {
+        System.out.println("Current balance: " + balance);
+
         return balance; // Retourne le solde actuel stocké dans l'attribut 'balance'
     }
 
-
-
-    // Foonction pour obtenir l'historique de la balance
     public SortedMap<Date, Double> getBalanceHistory(Date startDate, Date endDate) {
         SortedMap<Date, Double> balanceHistory = new TreeMap<>();
         double runningBalance = getBalanceAt(startDate); // Initialiser le solde courant au solde avant la startDate
@@ -144,12 +152,12 @@ public class Account {
                 balanceHistory.put(transactionDate, runningBalance);
             }
         }
-
-        // Ajouter le solde à la date de fin si aucune transaction n'est survenue à
-        // cette date
+        // Ajouter le solde à la date de fin si aucune transaction n'est survenue à cette date
         if (!balanceHistory.containsKey(endDate)) {
             balanceHistory.put(endDate, runningBalance);
         }
+        System.out.println("Balance history from " + startDate + " to " + endDate + ": " + balanceHistory);
+
         return balanceHistory;
     }
 }
